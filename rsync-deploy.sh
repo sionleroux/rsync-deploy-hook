@@ -27,10 +27,6 @@ fi
 
 # --- Config
 wwwpath=$(git config hooks.wwwpath)
-if [[ -z $wwwpath ]]; then
-	echo "Path to web server is empty (hooks.wwwpath)" 1>&2
-	exit 1
-fi
 
 # --- Check types
 # if $newrev is 0000...0000, it's a commit to delete a ref.
@@ -42,6 +38,11 @@ else
 fi
 
 if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
+	if [[ -z $wwwpath ]]; then
+		echo "Path to web server is empty (hooks.wwwpath)" 1>&2
+		exit 1
+	fi
+
 	tmpdir=`mktemp -d`
 	echo "building in $tmpdir" 1>&2
 
