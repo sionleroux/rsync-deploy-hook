@@ -25,6 +25,13 @@ if [ -z "$refname" -o -z "$oldrev" -o -z "$newrev" ]; then
 	exit 1
 fi
 
+# --- Config
+wwwpath=$(git config hooks.wwwpath)
+if [[ -z $wwwpath ]]; then
+	echo "Path to web server is empty (hooks.wwwpath)" 1>&2
+	exit 1
+fi
+
 # --- Check types
 # if $newrev is 0000...0000, it's a commit to delete a ref.
 zero="0000000000000000000000000000000000000000"
@@ -34,8 +41,19 @@ else
 	newrev_type=$(git cat-file -t $newrev)
 fi
 
-if [[ "$refname","$newrev_type" == "master,commit" ]]; then
-	#statements
+if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
+	tmpdir=`mktemp -d`
+	echo "building in $tmpdir" 1>&2
+
+	git --work-tree=$tmpdir checkout --force $newrev >/dev/null
+	if [[ $? -ne 0 ]]; then
+		echo "failed checking out $newrev to $tmpdir" 1>&2
+		exit 1
+	fi
+
+	cd $tmpdir
+	rsync --verbose --progress --stats --compress src/* $wwwpath
+
 fi
 
 # --- Finished
