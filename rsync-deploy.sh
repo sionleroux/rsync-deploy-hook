@@ -54,7 +54,12 @@ if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
 
 	cd $tmpdir
 	rsync \
-		--archive \
+		--recursive \
+		--times \
+		--chown=git:apache \
+		--perms \
+		--chmod=644 \
+		--links \
 		--verbose \
 		--progress \
 		--stats \
