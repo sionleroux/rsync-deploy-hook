@@ -53,12 +53,12 @@ if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
 	fi
 
 	cd $tmpdir
+	chmod -R a+r src/*
+	chown -R git:apache src/*
 	rsync \
 		--recursive \
-		--times \
-		--chown=git:apache \
 		--perms \
-		--chmod=644 \
+		--times \
 		--links \
 		--verbose \
 		--progress \
