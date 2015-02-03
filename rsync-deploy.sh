@@ -53,7 +53,7 @@ if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
 	fi
 
 	cd $tmpdir
-	rsync --verbose --progress --stats --compress src/* $wwwpath
+	rsync --archive --verbose --progress --stats --compress src/* $wwwpath
 
 fi
 
