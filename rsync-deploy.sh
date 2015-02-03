@@ -52,6 +52,8 @@ if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
 		exit 1
 	fi
 
+	set -e
+
 	cd $tmpdir
 	chmod -R a+r src/*
 	chown -R git:apache src/*
