@@ -64,6 +64,7 @@ if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
 		--progress \
 		--stats \
 		--compress \
+		--update \
 		src/* \
 		$wwwpath
 
