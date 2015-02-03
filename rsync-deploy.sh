@@ -55,6 +55,10 @@ if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
 
 	set -e
 
+	for i in sass/*.sass; do
+		sass $i src/$(basename ${i%.sass}).css
+	done
+
 	cd $tmpdir
 	chmod -R a+r src/*
 	chown -R git:apache src/*
