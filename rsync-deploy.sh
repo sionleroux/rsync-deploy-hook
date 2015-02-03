@@ -27,6 +27,7 @@ fi
 
 # --- Config
 wwwpath=$(git config hooks.wwwpath)
+keeptmpdir=$(git config --bool hooks.keeptmpdir)
 
 # --- Check types
 # if $newrev is 0000...0000, it's a commit to delete a ref.
@@ -69,6 +70,11 @@ if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
 		--update \
 		src/* \
 		$wwwpath
+
+	if [[ "$keeptmpdir" != "true" ]]; then
+		cd
+		rm -rf $tmpdir
+	fi
 
 fi
 
