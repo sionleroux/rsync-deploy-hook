@@ -4,8 +4,6 @@
 # Checks if the update is a commit on the master branch, then checks out the
 # files to a temporary directory and rsyncs them up to the web-server.
 #
-# TODO: compile SASS to CSS before rsyncing
-#
 
 # --- Command line
 refname="$1"
@@ -55,13 +53,10 @@ if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
 
 	set -e
 
-	for i in sass/*.sass; do
-		sass $i src/$(basename ${i%.sass}).css
-	done
-
 	cd $tmpdir
-	chmod -R a+r src/*
-	chown -R git:apache src/*
+	make
+	chmod -R a+r build/*
+	chown -R git:apache build/*
 	rsync \
 		--recursive \
 		--perms \
@@ -72,7 +67,7 @@ if [[ "$refname","$newrev_type" == "refs/heads/master","commit" ]]; then
 		--stats \
 		--compress \
 		--update \
-		src/* \
+		build/* \
 		$wwwpath
 
 	if [[ "$keeptmpdir" != "true" ]]; then
